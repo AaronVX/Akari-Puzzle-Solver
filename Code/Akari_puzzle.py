@@ -3,7 +3,6 @@ from Code.puzzle import Puzzle
 Puzzle_File_Name = "puzzle_sample/sample.txt"
 
 
-
 def read_puzzle_file():
     print('Reading sample')
     f = open(Puzzle_File_Name, "r")
@@ -11,7 +10,7 @@ def read_puzzle_file():
 
 
 def next_puzzle(f):
-    puzzle_str = ''
+    puzzle_str = []
     rows, cols = 0, 0
 
     if f is not None:
@@ -22,14 +21,22 @@ def next_puzzle(f):
 
         rows, cols = (int(s) for s in line.split())
 
+        puzzle_str = [[1] * rows for g in range(cols)]
+
         for i in range(rows):
-            puzzle_str += f.readline()
+            cells = f.readline()
+            for j in range(cols):
+                if cells[j] is not '_':
+                    puzzle_str[i][j] = int(cells[j])
+                else:
+                    puzzle_str[i][j] = 5
 
     return Puzzle(rows, cols, puzzle_str)
 
 
 def create_puzzle(plzn):
     print('creating puzzle')
+
 
 if __name__ == '__main__':
     f = read_puzzle_file()

@@ -19,12 +19,13 @@ class EmptyCell(Cell):
 
 
 class Puzzle:
+    puzzle = [[1] * 8 for i in range(8)]
+
     def __init__(self, rows, cols, puzzle_str):
         self.cols = cols
         self.rows = rows
         self.str = puzzle_str
         self.puzzle_solution = None
-
 
 
     # not done yet
