@@ -10,7 +10,7 @@ def read_puzzle_file():
 
 
 def next_puzzle(f):
-    puzzle_str = []
+    puzzle = []
     rows, cols = 0, 0
 
     if f is not None:
@@ -27,11 +27,11 @@ def next_puzzle(f):
             cells = f.readline()
             for j in range(cols):
                 if cells[j] is not '_':
-                    puzzle_str[i][j] = int(cells[j])
+                    puzzle[i][j] = int(cells[j])
                 else:
-                    puzzle_str[i][j] = 5
+                    puzzle[i][j] = 5
 
-    return Puzzle(rows, cols, puzzle_str)
+    return Puzzle(rows, cols, puzzle)
 
 
 def create_puzzle(plzn):
