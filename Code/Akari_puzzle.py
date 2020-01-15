@@ -21,7 +21,7 @@ def next_puzzle(f):
 
         rows, cols = (int(s) for s in line.split())
 
-        puzzle_str = [[1] * rows for g in range(cols)]
+        puzzle = [[1] * rows for g in range(cols)]
 
         for i in range(rows):
             cells = f.readline()
