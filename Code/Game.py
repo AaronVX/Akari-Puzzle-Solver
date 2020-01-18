@@ -39,7 +39,6 @@ def get_next_puzzle(f):
 if __name__ == '__main__':
     f = read_puzzle_file()
 
-
     puzzle = get_next_puzzle(f)
     while not puzzle.isFinished():
         puzzle.print_puzzle()
@@ -55,8 +54,6 @@ if __name__ == '__main__':
             if not puzzle.removeLightBult(row, col):
                 print('fail to remove')
         print('/********************/\n')
-
-
 
     f.close()
     print('done')
