@@ -18,19 +18,17 @@ def solvePuzzleUtil(puzzle, x, y, steps):
     if puzzle.isFinished is True:
         return True
 
-    if x < puzzle.rows and y < puzzle.cols:
-
+    # if x < puzzle.rows and y < puzzle.cols:
+    #     if x == 0 and y == 1:
+    #         print(puzzle.arr[x][y])
+    #         print(puzzle.isValidBulb(x, y) is True)
+    #         print(puzzle.isWallNeigbourValid(x, y) is True)
         # Move forward in x direction (light-off)
         if solvePuzzleUtil(puzzle, x + 1, y, steps + 1):
             return True
         # Move forward in y direction (light-off)
         if solvePuzzleUtil(puzzle, x, y + 1, steps + 1):
             return True
-
-        if x == 0 and y == 1:
-            print(puzzle.arr[x][y])
-            print(puzzle.isValidBulb(x, y) is True)
-            print(puzzle.isWallNeigbourValid(x, y) is True)
 
         if puzzle.isValidBulb(x, y) and puzzle.isWallNeigbourValid(x, y):
             puzzle.insert_light_bulb(x, y)

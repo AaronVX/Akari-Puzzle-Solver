@@ -75,11 +75,11 @@ class AkariPuzzle:
             col_temp, row_temp = col + x, row + y
             while self.isInBounds(row_temp, col_temp):
                 if self.isLightBulb(row_temp, col_temp):
-                    return True
+                    return False
                 elif self.isWall(row_temp, col_temp):
                     break
                 col_temp, row_temp = col_temp + x, row_temp + y
-        return False
+        return True
 
     # check whether the wall has correct number of neigbouring bulbs
     def isWallNeigbourValid(self, row, col):
