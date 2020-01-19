@@ -1,0 +1,52 @@
+import Code.Game as game
+import sys
+import numpy as np
+
+
+def solvePuzzle(puzzle):
+    steps = 0
+    if solvePuzzleUtil(puzzle, 0, 0, steps) is True:
+        puzzle.print_puzzle
+        print("total steps: {}".format(steps))
+        return True
+    else:
+        print("solution doesn't exist")
+        return False
+
+
+def solvePuzzleUtil(puzzle, x, y, steps):
+    if puzzle.isFinished is True:
+        return True
+
+    if x < puzzle.rows and y < puzzle.cols:
+
+        # Move forward in x direction (light-off)
+        if solvePuzzleUtil(puzzle, x + 1, y, steps + 1):
+            return True
+        # Move forward in y direction (light-off)
+        if solvePuzzleUtil(puzzle, x, y + 1, steps + 1):
+            return True
+
+        if x == 0 and y == 1:
+            print(puzzle.arr[x][y])
+            print(puzzle.isValidBulb(x, y) is True)
+            print(puzzle.isWallNeigbourValid(x, y) is True)
+
+        if puzzle.isValidBulb(x, y) and puzzle.isWallNeigbourValid(x, y):
+            puzzle.insert_light_bulb(x, y)
+            # Move forward in x direction (light-up)
+            if solvePuzzleUtil(puzzle, x + 1, y, steps + 1):
+                return True
+            # Move forward in y direction (light-up)
+            if solvePuzzleUtil(puzzle, x, y + 1, steps + 1):
+                return True
+
+    return False
+
+
+if __name__ == '__main__':
+    file = game.read_puzzle_file()
+    puzzle = game.get_next_puzzle(file)
+    puzzle.print_puzzle()
+
+    solvePuzzle(puzzle)

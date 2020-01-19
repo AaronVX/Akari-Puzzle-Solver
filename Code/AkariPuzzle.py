@@ -86,7 +86,7 @@ class AkariPuzzle:
         for x, y in AkariPuzzle.LIGHT_DIRECTION:
             if self.isInBounds(row + y, col + x):
                 if self.arr[row + y, col + x] <= 4:
-                    if self.arr[row + y, col + x] != self.countNeigbourBulb(row + y, col + x):
+                    if self.arr[row + y, col + x] == self.countNeigbourBulb(row + y, col + x):
                         return False
         return True
 
