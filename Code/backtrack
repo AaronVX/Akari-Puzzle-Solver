@@ -18,7 +18,7 @@ def solvePuzzleUtil(puzzle, x, y, steps):
     if puzzle.isFinished is True:
         return True
 
-    # if x < puzzle.rows and y < puzzle.cols:
+    if x < puzzle.rows and y < puzzle.cols:
     #     if x == 0 and y == 1:
     #         print(puzzle.arr[x][y])
     #         print(puzzle.isValidBulb(x, y) is True)
