@@ -9,6 +9,7 @@ import numpy as np
 
 class AkariPuzzle:
     LIGHT_DIRECTION = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+    WALL = range(5)
     LIGHT_OFF = 5
     LIGHT_ON = 6
     LIGHT_BULB = 7
@@ -61,12 +62,12 @@ class AkariPuzzle:
         return False
 
 
-    #return the number of light bulb neigbour cell(up, down, left, right)
-    def countNeigbourBulb(self, row, col):
+    #return the number of light bulb neighbour cell(up, down, left, right)
+    def countNeighbour(self, row, col, cellType):
         counter = 0
         for x, y in AkariPuzzle.LIGHT_DIRECTION:
             if self.isInBounds(row+y, col+x):
-                 if self.arr[row+y, col+x] == AkariPuzzle.LIGHT_BULB:
+                 if self.arr[row+y, col+x] == cellType:
                     counter+=1
         return counter
 
@@ -93,25 +94,25 @@ class AkariPuzzle:
 
     #whether the win condition is match
     def isFinished(self):
-        isAllLightOn = False
-        isWallNeigbourValid = True
-        isNoDoubleBulb = True
+        is_all_light_on = False
+        is_wall_neighbour_valid = True
+        is_valid_bulb = True
         if len(np.where(self.arr == AkariPuzzle.LIGHT_OFF)[0]) == 0: #no light OFF cell
-            isAllLightOn = True
+            is_all_light_on = True
 
         wall_indexes = np.where(self.arr <= 4)
         for row, col in zip(wall_indexes[0], wall_indexes[1]):
-            if self.arr[row, col] != self.countNeigbourBulb(row, col):
-                isWallNeigbourValid = False
+            if self.arr[row, col] != self.countNeighbour(row, col, AkariPuzzle.LIGHT_BULB):
+                is_wall_neighbour_valid = False
                 break
 
         lightBulbs = np.where(self.arr == AkariPuzzle.LIGHT_BULB)
         for row, col in zip(lightBulbs[0], lightBulbs[1]):
             if self.isValidBulb(row, col):
-                isNoDoubleBulb = False
+                is_valid_bulb = False
                 break
 
-        return isAllLightOn and isWallNeigbourValid and isNoDoubleBulb
+        return is_all_light_on and is_wall_neighbour_valid and is_valid_bulb
 
 
     def to_s(self):

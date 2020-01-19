@@ -3,7 +3,6 @@ import numpy as np
 
 Puzzle_File_Name = "puzzle_sample/sample.txt"
 
-
 def read_puzzle_file():
     print('Reading sample')
     f = open(Puzzle_File_Name, "r")
@@ -38,8 +37,8 @@ def get_next_puzzle(f):
 
 if __name__ == '__main__':
     f = read_puzzle_file()
-
     puzzle = get_next_puzzle(f)
+
     while not puzzle.isFinished():
         puzzle.print_puzzle()
         mode = int(input('\nSelect mode:\n0 ==> insert light bulb\n1 ==> delete light bulb\n'))
