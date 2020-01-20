@@ -3,7 +3,7 @@ import numpy as np
 import copy
 
 counter = 0
-
+DEBUG = True
 
 def solvePuzzle(puzzle5):
     if solvePuzzleUtil(puzzle5):
@@ -27,8 +27,8 @@ def solvePuzzleUtil(puzzle_rec):
             if puzzle_rec.isValidBulb(row, col) and puzzle_rec.isWallNeigbourValid(row, col):
                 puzzle_rec.insert_light_bulb(row, col)
                 counter += 1
-                # puzzle_rec.print_puzzle()
-                # print("****************")
+                if DEBUG: puzzle_rec.print_puzzle()
+                if DEBUG: print("****************")
                 if solvePuzzleUtil(puzzle_rec):
                     return True
                 else:
@@ -44,4 +44,4 @@ if __name__ == '__main__':
     puzzle4 = game.get_next_puzzle(file)
     puzzle5 = game.get_next_puzzle(file)
     puzzle5.print_puzzle()
-    solvePuzzle(puzzle3)
+    solvePuzzle(puzzle5)
