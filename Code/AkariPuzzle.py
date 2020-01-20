@@ -70,7 +70,6 @@ class AkariPuzzle:
 
     # check there is no double light bulb in same row or same col
     def isValidBulb(self, row, col):
-
         for x, y in AkariPuzzle.LIGHT_DIRECTION:
             col_temp, row_temp = col + x, row + y
             while self.isInBounds(row_temp, col_temp):
@@ -101,7 +100,7 @@ class AkariPuzzle:
     def isFinished(self):
         isAllLightOn = False
         isWallNeigbourValid = True
-        isNoDoubleBulb = True
+        isALLVaildBulb = True
         if len(np.where(self.arr == AkariPuzzle.LIGHT_OFF)[0]) == 0:  # no light OFF cell
             isAllLightOn = True
 
@@ -113,11 +112,11 @@ class AkariPuzzle:
 
         lightBulbs = np.where(self.arr == AkariPuzzle.LIGHT_BULB)
         for row, col in zip(lightBulbs[0], lightBulbs[1]):
-            if self.isValidBulb(row, col):
-                isNoDoubleBulb = False
+            if not self.isValidBulb(row, col):
+                isALLVaildBulb = False
                 break
 
-        return isAllLightOn and isWallNeigbourValid and isNoDoubleBulb
+        return isAllLightOn and isWallNeigbourValid and isALLVaildBulb
 
     def to_s(self):
         str = ''
