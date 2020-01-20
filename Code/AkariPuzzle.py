@@ -117,8 +117,6 @@ class AkariPuzzle:
                 isALLVaildBulb = False
                 break
 
-        print(isAllLightOn, isWallNeigbourValid, isALLVaildBulb)
-
         return isAllLightOn and isWallNeigbourValid and isALLVaildBulb
 
     def to_s(self):
