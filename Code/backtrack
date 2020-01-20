@@ -2,10 +2,12 @@ import Code.Game as game
 import sys
 import numpy as np
 
+from Code.AkariPuzzle import AkariPuzzle
+
 
 def solvePuzzle(puzzle):
     steps = 0
-    if solvePuzzleUtil(puzzle, 0, 0, steps) is True:
+    if solvePuzzleUtil(puzzle, steps):
         puzzle.print_puzzle
         print("total steps: {}".format(steps))
         return True
@@ -14,30 +16,19 @@ def solvePuzzle(puzzle):
         return False
 
 
-def solvePuzzleUtil(puzzle, x, y, steps):
+def solvePuzzleUtil(puzzle, steps):
     if puzzle.isFinished is True:
         return True
 
-    if x < puzzle.rows and y < puzzle.cols:
-    #     if x == 0 and y == 1:
-    #         print(puzzle.arr[x][y])
-    #         print(puzzle.isValidBulb(x, y) is True)
-    #         print(puzzle.isWallNeigbourValid(x, y) is True)
-        # Move forward in x direction (light-off)
-        if solvePuzzleUtil(puzzle, x + 1, y, steps + 1):
-            return True
-        # Move forward in y direction (light-off)
-        if solvePuzzleUtil(puzzle, x, y + 1, steps + 1):
-            return True
+    lightBulbs = np.where(puzzle.arr == puzzle.LIGHT_OFF)
 
-        if puzzle.isValidBulb(x, y) and puzzle.isWallNeigbourValid(x, y):
-            puzzle.insert_light_bulb(x, y)
-            # Move forward in x direction (light-up)
-            if solvePuzzleUtil(puzzle, x + 1, y, steps + 1):
-                return True
-            # Move forward in y direction (light-up)
-            if solvePuzzleUtil(puzzle, x, y + 1, steps + 1):
-                return True
+    if len(lightBulbs[0]) > 0:
+        for row, col in zip(lightBulbs[0], lightBulbs[1]):
+            if puzzle.isValidBulb(row, col) and puzzle.isWallNeigbourValid(row, col):
+                puzzle.insert_light_bulb(row, col)
+                # puzzle.print_puzzle()
+                if solvePuzzleUtil(puzzle, steps + 1):
+                    return True
 
     return False
 
@@ -45,6 +36,16 @@ def solvePuzzleUtil(puzzle, x, y, steps):
 if __name__ == '__main__':
     file = game.read_puzzle_file()
     puzzle = game.get_next_puzzle(file)
-    puzzle.print_puzzle()
+    # puzzle.print_puzzle()
+    testPuzzle = np.array([[1, 7, 1, 1, 7, 2],
+                          [1, 6, 0, 6, 6, 7],
+                          [7, 6, 2, 6, 6, 6],
+                          [2, 6, 7, 3, 7, 0],
+                          [7, 1, 3, 7, 1, 0],
+                          [1, 6, 7, 6, 0, 0]], dtype=np.int64)
+    np.asarray(testPuzzle)
 
-    solvePuzzle(puzzle)
+    test_1 = AkariPuzzle(6, 6, testPuzzle)
+    test_1.print_puzzle()
+    print(test_1.isFinished())
+    # solvePuzzle(puzzle)
