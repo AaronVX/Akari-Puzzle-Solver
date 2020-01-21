@@ -5,11 +5,10 @@ import copy
 counter = 0
 
 
-def solvePuzzle(puzzle):
-    domain = np.where(puzzle.arr == puzzle.LIGHT_OFF)
-    if solvePuzzleUtil(puzzle, domain):
+def solvePuzzle(puzzle5):
+    if solvePuzzleUtil(puzzle5):
         print("**************")
-        puzzle.print_puzzle()
+        puzzle5.print_puzzle()
         print("puzzle solved. \ntotal steps: {}".format(counter))
         return True
     else:
@@ -17,34 +16,33 @@ def solvePuzzle(puzzle):
         return False
 
 
-def solvePuzzleUtil(puzzle_rec, domain):
+def solvePuzzleUtil(puzzle_rec):
     global counter
     if puzzle_rec.isFinished():
         return True
 
-    if len(domain[0]) > 0:
-        for row, col in zip(domain[0], domain[1]):
+    light_off_bulbs = np.where(puzzle_rec.arr == puzzle_rec.LIGHT_OFF)
+
+    if len(light_off_bulbs[0]) > 0:
+        for row, col in zip(light_off_bulbs[0], light_off_bulbs[1]):
             counter += 1
             if puzzle_rec.isValidBulb(row, col) and puzzle_rec.isWallNeigbourValid(row, col):
                 puzzle_rec.insert_light_bulb(row, col)
-                domain = np.delete(domain, 0, 1)
-                if solvePuzzleUtil(puzzle_rec, domain):
+
+                # puzzle_rec.print_puzzle()
+                # print("****************")
+                if solvePuzzleUtil(puzzle_rec):
                     return True
                 else:
                     puzzle_rec.removeLightBult(row, col)
-                    np.insert(domain, 0, [row, col], axis=1)
-
     return False
 
 
 if __name__ == '__main__':
     file = game.read_puzzle_file()
     puzzle = game.get_next_puzzle(file)
-    # while puzzle.rows is not 8:
+    # while puzzle.rows is not 10:
     #     puzzle = game.get_next_puzzle(file)
-    puzzle2 = game.get_next_puzzle(file)
-    puzzle3 = game.get_next_puzzle(file)
-    puzzle4 = game.get_next_puzzle(file)
-    puzzle5 = game.get_next_puzzle(file)
-    puzzle5.print_puzzle()
-    solvePuzzle(puzzle5)
+
+    puzzle.print_puzzle()
+    solvePuzzle(puzzle)
