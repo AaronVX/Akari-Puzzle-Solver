@@ -52,8 +52,7 @@ def solvePuzzleUtil(puzzle_rec, notAssigned_list):
         return True
 
     if counter > 100000:
-        print("Timeout!")
-        sys.exit()
+        return "timeout"
 
     light_bulbs = np.where(puzzle_rec.arr == puzzle_rec.LIGHT_BULB)
     light_bulbs_list = list(zip(light_bulbs[0], light_bulbs[1]))
@@ -67,9 +66,9 @@ def solvePuzzleUtil(puzzle_rec, notAssigned_list):
                 puzzle_rec.insert_light_bulb(row, col)
 
                 if DEBUG:
-                    # print("**************")
-                    # puzzle_rec.print_puzzle()
-                    print(counter)
+                    print("**************")
+                    puzzle_rec.print_puzzle()
+                    print(light_bulbs_list)
                 if HEURISTIC and len(temp) > 0:
                     temp = findConstraining(puzzle_rec, temp)
 
@@ -88,14 +87,17 @@ def findConstraining(puzzle, notAssigned_list):
     values = []
     for row, col in notAssigned_list:
         count = countLightUp(puzzle, row, col)
-        values.append([row, col, count * -1])
+        # values.append([row, col, count * -1])
+        values.append(tuple([row, col, count * -1]))
 
-    availableSquare = np.array(values)
-    availableSquare = np.sort(availableSquare.view('i8,i8,i8'), order=['f2'], axis=0).view(np.int)
-    availableSquare = np.delete(availableSquare, 2, 1)
-    availableSquare = availableSquare.transpose()
+    dtype = [('row', int), ('col', int), ('range', int)]
+    notAssigned_list_decending = np.array(values, dtype=dtype)
+    notAssigned_list_decending = np.sort(notAssigned_list_decending, order=['range'])
 
-    return list(zip(availableSquare[0], availableSquare[1]))
+    row_col_list = ['row', 'col']
+    notAssigned_list_decending = notAssigned_list_decending[row_col_list]
+
+    return list(map(tuple, notAssigned_list_decending))
 
 
 if __name__ == '__main__':
