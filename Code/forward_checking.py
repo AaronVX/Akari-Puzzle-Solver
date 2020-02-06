@@ -34,7 +34,7 @@ def solvePuzzleUtil(puzzle_rec):
                 if solvePuzzleUtil(puzzle_rec):
                     return True
                 else:
-                    puzzle_rec.removeLightBult(row, col)
+                    puzzle_rec.removeLightBulb(row, col)
     return False
 
 

@@ -7,7 +7,6 @@ import numpy as np
 # 6 = light up
 # 7 = light bulb
 
-
 class AkariPuzzle:
     LIGHT_DIRECTION = [(1, 0), (0, 1), (-1, 0), (0, -1)]
     LIGHT_OFF = 5
@@ -36,7 +35,7 @@ class AkariPuzzle:
             return True
         return False
 
-    def removeLightBult(self, row, col):
+    def removeLightBulb(self, row, col):
         if self.isInBounds(row, col) and self.isLightBulb(row, col):
             self.arr[row, col] = AkariPuzzle.LIGHT_OFF
             self.update_puzzle()
@@ -70,7 +69,6 @@ class AkariPuzzle:
 
     # check there is no double light bulb in same row or same col
     def isValidBulb(self, row, col):
-
         for x, y in AkariPuzzle.LIGHT_DIRECTION:
             col_temp, row_temp = col + x, row + y
             while self.isInBounds(row_temp, col_temp):
@@ -80,6 +78,8 @@ class AkariPuzzle:
                     break
                 col_temp, row_temp = col_temp + x, row_temp + y
         return True
+
+
 
     # check whether the wall has correct number of neigbouring bulbs
     def isWallNeigbourValid(self, row, col):

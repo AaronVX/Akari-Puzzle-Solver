@@ -4,9 +4,9 @@ import numpy as np
 Puzzle_File_Name = "puzzle_sample/sample.txt"
 
 
-def read_puzzle_file():
+def read_puzzle_file(fileName=Puzzle_File_Name):
     print('Reading sample')
-    f = open(Puzzle_File_Name, "r")
+    f = open(fileName, "r")
     return f
 
 
@@ -29,6 +29,10 @@ def get_next_puzzle(f):
             for j in range(cols):
                 if cells[j] is '_':
                     puzzle[i, j] = AkariPuzzle.LIGHT_OFF
+                elif cells[j] is 'b':
+                    puzzle[i, j] = AkariPuzzle.LIGHT_BULB
+                elif cells[j] is '#':
+                    puzzle[i, j] = AkariPuzzle.LIGHT_ON
                 else:
                     puzzle[i, j] = int(cells[j])
 
@@ -51,7 +55,7 @@ if __name__ == '__main__':
         elif mode == 1:
             row = int(input('Enter the row of light bulb: '))
             col = int(input('Enter the col of light bulb: '))
-            if not puzzle.removeLightBult(row, col):
+            if not puzzle.removeLightBulb(row, col):
                 print('fail to remove')
         print('/********************/\n')
 
