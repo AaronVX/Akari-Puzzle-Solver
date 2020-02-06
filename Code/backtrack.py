@@ -51,6 +51,6 @@ if __name__ == '__main__':
     puzzle2 = game.get_next_puzzle(file)
     puzzle3 = game.get_next_puzzle(file)
     puzzle4 = game.get_next_puzzle(file)
-    puzzle5 = game.get_next_puzzle(file)
+    puzzle = game.get_next_puzzle(file)
 
-    solvePuzzle(puzzle5)
+    solvePuzzle(puzzle)

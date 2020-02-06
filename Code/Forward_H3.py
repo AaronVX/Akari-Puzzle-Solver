@@ -3,19 +3,26 @@ from Code.AkariPuzzle import AkariPuzzle as ap
 import numpy as np
 from termcolor import colored
 import Code.ForwardChecking as fc
-
+import Code.Forward_H2 as h2
+from sklearn.preprocessing import normalize
 DEBUG = False
 counter = 0
 checked_set = []
-testing_file_name = 'puzzle_sample/sample1.txt'
+testing_file_name = 'puzzle_sample/lightup puzzles.txt'
+
+def normalize(v):
+    norm=np.linalg.norm(v, ord=1)
+    if norm==0:
+        norm=np.finfo(v.dtype).eps
+    return v/norm
 
 
-def solvePuzzleH1(puzzle):
+def solvePuzzleH3(puzzle):
     global counter, checked_set
     counter = 0
     checked_set = []
     puzzle.print_puzzle()
-    if solvePuzzleUtil_H1(puzzle,np.copy(puzzle.probability_arr)):
+    if solvePuzzleUtil_H3(puzzle,np.copy(puzzle.probability_arr)):
         print("**************")
         puzzle.print_puzzle()
         print("puzzle solved. \ntotal steps: {}".format(counter))
@@ -26,21 +33,29 @@ def solvePuzzleH1(puzzle):
 
 
 
-def solvePuzzleUtil_H1(puzzle_rec,probability_arr):
-    global counter, checked_set
+def solvePuzzleUtil_H3(puzzle_rec,probability_arr):
+    global counter,checked_set
     if puzzle_rec.isFinished():
         puzzle_rec.print_puzzle()
         return True
 
     fc.update_constraint(puzzle_rec, probability_arr)
-    fc.print_probability_arr(probability_arr)
-    print('/**********************************/')
+    # fc.print_probability_arr(probability_arr)
+    # print('/**********************************/')
     possible_cell = np.where(probability_arr >= 0)
     light_off_bulbs = np.where(puzzle_rec.arr == puzzle_rec.LIGHT_OFF)
     possible_cell_set = set(zip(possible_cell[0], possible_cell[1])).intersection(set(zip(light_off_bulbs[0], light_off_bulbs[1])))
-    possible_cell_set = sorted(possible_cell_set, key=lambda cell: probability_arr[cell[0], cell[1]], reverse=True)
+
     light_bulbs = np.where(puzzle_rec.arr == puzzle_rec.LIGHT_BULB)
     light_bulbs_set = set(zip(light_bulbs[0], light_bulbs[1]))
+
+    edge_num_arr = h2.count_edge(puzzle_rec)
+
+    normalized_v = edge_num_arr / np.sqrt(np.sum(edge_num_arr**2))
+
+
+
+    possible_cell_set = sorted(possible_cell_set, key=lambda cell: probability_arr[cell[0], cell[1]]+normalized_v[cell[0], cell[1]]/100, reverse=True)
 
     if len(possible_cell[0]) > 0:
         for row, col in possible_cell_set:
@@ -54,15 +69,15 @@ def solvePuzzleUtil_H1(puzzle_rec,probability_arr):
                 if DEBUG:
                     puzzle_rec.print_puzzle()
                     print("****************")
-                    fc.print_probability_arr(probability_arr)
+                    # fc.print_probability_arr(probability_arr)
 
-                if solvePuzzleUtil_H1(puzzle_rec, next_probability_arr):
+                if solvePuzzleUtil_H3(puzzle_rec, next_probability_arr):
                     return True
                 else:
                     puzzle_rec.removeLightBult(row, col)
                     if DEBUG:
                         puzzle_rec.print_puzzle()
-                        fc.print_probability_arr(probability_arr)
+                        # fc.print_probability_arr(probability_arr)
                         print("****************")
                     checked_set.append(light_bulbs_set)
     return False
@@ -73,5 +88,5 @@ if __name__ == '__main__':
 
     while puzzle is not None:
         # puzzle.print_solution()
-        solvePuzzleH1(puzzle)
+        solvePuzzleH3(puzzle)
         puzzle = game.get_next_puzzle(f, isForward=True)

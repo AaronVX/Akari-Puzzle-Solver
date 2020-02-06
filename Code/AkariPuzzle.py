@@ -7,7 +7,7 @@ from termcolor import colored
 # 6 = light up
 # 7 = light bulb
 
-color_print = True
+color_print = False
 checked_set = {}
 
 

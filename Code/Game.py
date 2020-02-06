@@ -1,7 +1,7 @@
 from Code.AkariPuzzle import AkariPuzzle
 import numpy as np
 from termcolor import colored
-
+SHOW_SOLUTION = False
 Puzzle_File_Name = "puzzle_sample/sample.txt"
 
 def read_puzzle_file(fileName=Puzzle_File_Name):
@@ -13,19 +13,15 @@ def read_puzzle_file(fileName=Puzzle_File_Name):
 def get_next_puzzle(f, isForward=False):
     puzzle = None
     rows, cols = 0, 0
-
     if f is not None:
         line = f.readline()
-
-
-        while len(line) == 0 or line[0] == '#':
+        while len(line.strip()) == 0 or line[0] == '#':
             if len(line.strip()) == 0:
                 return None
             else:
                 line = f.readline()
 
         rows, cols = (int(s) for s in line.split())
-
         puzzle = np.zeros((rows, cols), dtype=np.int8)
 
         for i in range(rows):
@@ -36,6 +32,7 @@ def get_next_puzzle(f, isForward=False):
                 else:
                     puzzle[i, j] = int(cells[j])
 
+#read solution
         line = f.readline()
         solution = np.zeros((rows, cols), dtype=np.int8)
         i = 0
