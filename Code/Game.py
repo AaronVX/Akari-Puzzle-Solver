@@ -66,8 +66,8 @@ def get_next_puzzle(f, isForward=False):
 
 if __name__ == '__main__':
     f = read_puzzle_file()
-    puzzle = get_next_puzzle(f)
 
+    puzzle = get_next_puzzle(f)
     while not puzzle.isFinished():
         puzzle.print_puzzle()
         mode = int(input('\nSelect mode:\n0 ==> insert light bulb\n1 ==> delete light bulb\n'))
@@ -79,7 +79,7 @@ if __name__ == '__main__':
         elif mode == 1:
             row = int(input('Enter the row of light bulb: '))
             col = int(input('Enter the col of light bulb: '))
-            if not puzzle.removeLightBult(row, col):
+            if not puzzle.removeLightBulb(row, col):
                 print('fail to remove')
         print('/********************/\n')
 
