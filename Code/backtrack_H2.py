@@ -9,65 +9,98 @@ import Code.Game as game
 import numpy as np
 
 counter = 0
-DEBUG = True
-checked_list = []
-text_file = 'puzzle_sample/sample.txt'
+testing_file_name = 'puzzle_sample/sample.txt'
 
 
 def solvePuzzle(puzzle):
     notAssigned = np.where(puzzle.arr == puzzle.LIGHT_OFF)
     notAssigned_list = list(zip(notAssigned[0], notAssigned[1]))
-
-    if solvePuzzleUtil(puzzle, notAssigned_list):
+    domain = (puzzle.LIGHT_OFF, puzzle.LIGHT_BULB)
+    result = solvePuzzleUtil(puzzle, notAssigned_list, domain)
+    if result:
         print("**************")
         puzzle.print_puzzle()
-        print("puzzle solved. \ntotal steps: {}".format(counter))
+        print("puzzle solved. \ntotal number of nodes visited: {}".format(counter))
         return True
     else:
         print("solution doesn't exist")
         return False
 
 
-def solvePuzzleUtil(puzzle_rec, notAssigned_list):
+def solvePuzzleUtil(puzzle_rec, notAssigned_list, domain):
     global counter
     if puzzle_rec.isFinished():
         return True
 
-    light_bulbs = np.where(puzzle_rec.arr == puzzle_rec.LIGHT_BULB)
-    light_bulbs_list = list(zip(light_bulbs[0], light_bulbs[1]))
+    if len(notAssigned_list) == 0:
+        return False
 
-    if len(notAssigned_list) > 0 and light_bulbs_list not in checked_list:
-        for row, col in notAssigned_list:
-            counter += 1
-            if puzzle_rec.isValidBulb(row, col) and puzzle_rec.isWallNeigbourValid(row, col):
+    cell = findConstraining(puzzle_rec, notAssigned_list)
+    row = cell[0]
+    col = cell[1]
+
+    notAssigned_list.remove(cell)
+
+    for i in domain:
+        counter += 1
+
+        if i == puzzle_rec.LIGHT_BULB:
+
+            if checkValid(puzzle_rec, row, col):
                 puzzle_rec.insert_light_bulb(row, col)
-                temp = notAssigned_list.copy()
-                temp.remove((row, col))
-
-                if DEBUG:
-                    print("**************")
-                    puzzle_rec.print_puzzle()
-                    # print(temp)
-
-                if solvePuzzleUtil(puzzle_rec, temp):
+                if solvePuzzleUtil(puzzle_rec, notAssigned_list, domain):
                     return True
                 else:
-                    puzzle_rec.removeLightBulb(row, col)
-                    checked_list.append(light_bulbs_list)
+                    puzzle_rec.removeLightBult(row, col)
+
+        elif i == puzzle_rec.LIGHT_OFF:
+            if solvePuzzleUtil(puzzle_rec, notAssigned_list, domain):
+                return True
+
+    notAssigned_list.append(cell)
 
     return False
 
+def checkValid(puzzle_rec, row, col):
+    return puzzle_rec.isValidBulb(row, col) and puzzle_rec.isWallNeigbourValid(row, col)
+
+# count number of squares light up by the bulb
+def countLightUp(puzzle, row, col):
+    count = 0
+    for x, y in puzzle.LIGHT_DIRECTION:
+        col_temp, row_temp = col + x, row + y
+        while puzzle.isInBounds(row_temp, col_temp):
+            if puzzle.isLightBulb(row_temp, col_temp):
+                break
+            elif puzzle.isWall(row_temp, col_temp):
+                break
+            elif puzzle.arr[row_temp, col_temp] == puzzle.LIGHT_ON:
+                count -= 1
+            count += 1
+            col_temp, row_temp = col_temp + x, row_temp + y
+    return count
+
+
+def findConstraining(puzzle, notAssigned_list):
+    if len(notAssigned_list) == 0:
+        return []
+    winner = []
+    max_count = 0
+    for row, col in notAssigned_list:
+        count = countLightUp(puzzle, row, col)
+        if count >= max_count:
+            winner = tuple([row, col])
+            max_count = count
+
+    return winner
+
 if __name__ == '__main__':
-    file = game.read_puzzle_file(text_file)
-    puzzle = game.get_next_puzzle(file)
-    while puzzle.rows is not 8:
-        puzzle = game.get_next_puzzle(file)
-    puzzle2 = game.get_next_puzzle(file)
-    puzzle3 = game.get_next_puzzle(file)
-    puzzle4 = game.get_next_puzzle(file)
-    puzzle5 = game.get_next_puzzle(file)
-    puzzle4.print_puzzle()
-    solvePuzzle(puzzle4)
+    f = game.read_puzzle_file(fileName=testing_file_name)
+    puzzle = game.get_next_puzzle(f, isForward=True)
+
+    while puzzle is not None:
+        solvePuzzle(puzzle)
+        puzzle = game.get_next_puzzle(f, isForward=True)
 
 
 
