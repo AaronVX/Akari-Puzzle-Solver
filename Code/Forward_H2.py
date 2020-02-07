@@ -8,7 +8,7 @@ import Code.Game as game
 from Code.AkariPuzzle import AkariPuzzle as ap
 import numpy as np
 from termcolor import colored
-import Code.ForwardChecking as fc
+import Code.ForwardChecking  as fc
 
 DEBUG = False
 counter = 0
@@ -20,7 +20,6 @@ def solvePuzzleH2(puzzle):
     counter = 0
     checked_set = []
     if solvePuzzleUtil_H2(puzzle,np.copy(puzzle.probability_arr)):
-        print("**************")
         puzzle.print_puzzle()
         print("puzzle solved. \ntotal steps: {}".format(counter))
         return True
@@ -48,7 +47,6 @@ def count_edge(puzzle):
 def solvePuzzleUtil_H2(puzzle_rec,probability_arr):
     global counter,checked_set
     if puzzle_rec.isFinished():
-        puzzle_rec.print_puzzle()
         return True
 
     fc.update_constraint(puzzle_rec, probability_arr)
@@ -81,7 +79,7 @@ def solvePuzzleUtil_H2(puzzle_rec,probability_arr):
                 if solvePuzzleUtil_H2(puzzle_rec, next_probability_arr):
                     return True
                 else:
-                    puzzle_rec.removeLightBult(row, col)
+                    puzzle_rec.removeLightBulb(row, col)
                     checked_set.append(light_bulbs_set)
                     if DEBUG:
                         puzzle_rec.print_puzzle()

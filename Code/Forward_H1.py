@@ -8,7 +8,7 @@ import Code.Game as game
 from Code.AkariPuzzle import AkariPuzzle as ap
 import numpy as np
 from termcolor import colored
-import Code.ForwardChecking as fc
+import Code.ForwardChecking  as fc
 
 DEBUG = False
 counter = 0
@@ -20,9 +20,8 @@ def solvePuzzleH1(puzzle):
     global counter, checked_set
     counter = 0
     checked_set = []
-    puzzle.print_puzzle()
-    if solvePuzzleUtil_H1(puzzle,np.copy(puzzle.probability_arr)):
-        print("**************")
+
+    if solvePuzzleUtil_H1(puzzle, np.copy(puzzle.probability_arr)):
         puzzle.print_puzzle()
         print("puzzle solved. \ntotal steps: {}".format(counter))
         return True
@@ -35,12 +34,10 @@ def solvePuzzleH1(puzzle):
 def solvePuzzleUtil_H1(puzzle_rec,probability_arr):
     global counter, checked_set
     if puzzle_rec.isFinished():
-        puzzle_rec.print_puzzle()
         return True
 
     fc.update_constraint(puzzle_rec, probability_arr)
-    fc.print_probability_arr(probability_arr)
-    print('/**********************************/')
+
     possible_cell = np.where(probability_arr >= 0)
     light_off_bulbs = np.where(puzzle_rec.arr == puzzle_rec.LIGHT_OFF)
     possible_cell_set = set(zip(possible_cell[0], possible_cell[1])).intersection(set(zip(light_off_bulbs[0], light_off_bulbs[1])))
@@ -65,7 +62,7 @@ def solvePuzzleUtil_H1(puzzle_rec,probability_arr):
                 if solvePuzzleUtil_H1(puzzle_rec, next_probability_arr):
                     return True
                 else:
-                    puzzle_rec.removeLightBult(row, col)
+                    puzzle_rec.removeLightBulb(row, col)
                     if DEBUG:
                         puzzle_rec.print_puzzle()
                         fc.print_probability_arr(probability_arr)

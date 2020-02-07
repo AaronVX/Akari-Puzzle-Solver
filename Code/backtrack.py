@@ -12,7 +12,7 @@ import sys
 counter = 0
 # set HEURISTIC to true to enable backtracking with heuristic 2
 HEURISTIC = True
-DEBUG = True
+DEBUG = False
 checked_list = []
 text_file = 'puzzle_sample/sample1.txt'
 
@@ -44,7 +44,6 @@ def solvePuzzle(puzzle):
         notAssigned_list = findConstraining(puzzle, temp_list)
 
     if solvePuzzleUtil(puzzle, notAssigned_list):
-        print("**************")
         puzzle.print_puzzle()
         print("puzzle solved. \ntotal number of nodes visited: {}".format(counter))
         return True

@@ -80,7 +80,7 @@ def check_cell_lightup_constraint(puzzle,probability_arr,row,col):
     return True  # insert successfully
 
 
-#check the
+
 def update_neighbour(puzzle, row, col):
     for x, y in ap.LIGHT_DIRECTION:
         col_temp, row_temp = col + x, row + y
@@ -90,7 +90,7 @@ def update_neighbour(puzzle, row, col):
     return True
 
 def print_constraited_puzzle(probability_arr):
-    print('/*******************************************/')
+
     for i in range(puzzle.rows):
         for j in range(puzzle.cols):
             value = probability_arr[i, j]
@@ -141,8 +141,9 @@ def solvePuzzle(puzzle):
     global counter, checked_set
     counter = 0
     checked_set = []
-    puzzle.print_puzzle()
+
     if solvePuzzleUtil(puzzle,np.copy(puzzle.probability_arr)):
+        puzzle.print_puzzle()
         print("puzzle solved. \ntotal steps: {}".format(counter))
         return True
     else:
@@ -153,7 +154,6 @@ def solvePuzzle(puzzle):
 def solvePuzzleUtil(puzzle_rec,probability_arr):
     global counter, checked_set
     if puzzle_rec.isFinished():
-        puzzle_rec.print_puzzle()
         return True
     update_constraint(puzzle_rec, probability_arr)
 
@@ -178,7 +178,7 @@ def solvePuzzleUtil(puzzle_rec,probability_arr):
                 if solvePuzzleUtil(puzzle_rec, next_probability_arr):
                     return True
                 else:
-                    puzzle_rec.removeLightBult(row, col)
+                    puzzle_rec.removeLightBulb(row, col)
                     if DEBUG: puzzle_rec.print_puzzle()
                     checked_set.append(light_bulbs_set)
     return False

@@ -44,7 +44,7 @@ class AkariPuzzle:
         return False
 
     def isWall(self, row, col):
-        if self.arr[row, col] in range(5):
+        if self.isInBounds(row, col) and self.arr[row, col] in range(5):
             return True
         return False
 
@@ -64,7 +64,7 @@ class AkariPuzzle:
                         return False
         return True
 
-    def removeLightBult(self, row, col):
+    def removeLightBulb(self, row, col):
         if self.isInBounds(row, col) and self.isLightBulb(row, col):
             self.arr[row, col] = AkariPuzzle.LIGHT_OFF
             self.update_puzzle()
@@ -167,7 +167,6 @@ class AkariPuzzle:
 
 
     def print_puzzle(self):
-        print('/*********************  puzzle  ***************************/')
         for i in range(self.rows) :
             for j in range(self.cols):
                 value = self.arr[i, j]
