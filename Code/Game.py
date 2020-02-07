@@ -40,7 +40,7 @@ def get_next_puzzle(f, isForward=False):
         is_solution_line = False
         while (len(line) == 0 or line[0] == '#' ) and i < rows:
             if len(line.strip()) == 0:
-                return None
+                break
 
             for ch in line:
                 if ch is '_':
