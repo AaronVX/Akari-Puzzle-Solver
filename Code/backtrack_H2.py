@@ -43,7 +43,7 @@ def solvePuzzleUtil(puzzle_rec, notAssigned_list, domain):
 
     for i in domain:
         counter += 1
-        if counter % 1000 == 0: print(counter)
+
         if i == puzzle_rec.LIGHT_BULB:
 
             if checkValid(puzzle_rec, row, col):
