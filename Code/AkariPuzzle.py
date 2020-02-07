@@ -1,11 +1,14 @@
 import numpy as np
-
+from termcolor import colored
 
 # puzzle cell value
 # 0-4 = wall
 # 5 = no light
 # 6 = light up
 # 7 = light bulb
+
+color_print = False
+checked_set = {}
 
 
 class AkariPuzzle:
@@ -14,13 +17,20 @@ class AkariPuzzle:
     LIGHT_ON = 6
     LIGHT_BULB = 7
 
-    def __init__(self, rows, cols, puzzle_arr):
+    def __init__(self, rows, cols, puzzle_arr, solution=None, isForward=False):
         self.cols = cols
         self.rows = rows
         self.original_puzzle = puzzle_arr
         self.arr = puzzle_arr.copy()
+        self.solution = solution
+        if (isForward):  # for forward tracking
+            self.probability_arr = np.zeros((rows, cols), dtype=np.float64)
+            self.update_list = []
+            walls = np.where(np.logical_and(self.arr >= 0, self.arr <= 4))
+            for row, col in zip(walls[0], walls[1]):
+                self.update_list.append((row, col))
 
-    # check the position whether is on the pazzle
+    #check the position whether is on the pazzle
     def isInBounds(self, row, col):
         if col >= 0 and col < self.cols and row >= 0 and row < self.rows:
             return True
@@ -31,17 +41,29 @@ class AkariPuzzle:
             return True
         return False
 
+
     def isLightBulb(self, row, col):
         if self.arr[row, col] == AkariPuzzle.LIGHT_BULB:
             return True
         return False
 
+        # check whether the wall has correct number of neigbouring bulbs
+
+    def isWallNeigbourValid(self, row, col):
+        for x, y in AkariPuzzle.LIGHT_DIRECTION:
+            if self.isInBounds(row + y, col + x):
+                if self.arr[row + y, col + x] <= 4:
+                    if self.arr[row + y, col + x] == self.countNeighbour(row + y, col + x, AkariPuzzle.LIGHT_BULB):
+                        return False
+        return True
+
     def removeLightBult(self, row, col):
         if self.isInBounds(row, col) and self.isLightBulb(row, col):
             self.arr[row, col] = AkariPuzzle.LIGHT_OFF
             self.update_puzzle()
-            return True  # remove successfully
-        return False  # failure
+            return True         #remove successfully
+        return False            #failure
+
 
     def insert_light_bulb(self, row, col):
         if self.isInBounds(row, col) and self.isWall(row, col) is False:
@@ -59,16 +81,16 @@ class AkariPuzzle:
             return True  # insert successfully
         return False
 
-    # return the number of light bulb neigbour cell(up, down, left, right)
-    def countNeigbourBulb(self, row, col):
+    # return the number of light bulb neighbour cell(up, down, left, right)
+    def countNeighbour(self, row, col, cellType):
         counter = 0
         for x, y in AkariPuzzle.LIGHT_DIRECTION:
             if self.isInBounds(row + y, col + x):
-                if self.arr[row + y, col + x] == AkariPuzzle.LIGHT_BULB:
+                if self.arr[row + y, col + x] == cellType:
                     counter += 1
         return counter
 
-    # check there is no double light bulb in same row or same col
+    #check there is no double light bulb in same row or same col
     def isValidBulb(self, row, col):
 
         for x, y in AkariPuzzle.LIGHT_DIRECTION:
@@ -81,12 +103,14 @@ class AkariPuzzle:
                 col_temp, row_temp = col_temp + x, row_temp + y
         return True
 
+
+
     # check whether the wall has correct number of neigbouring bulbs
     def isWallNeigbourValid(self, row, col):
         for x, y in AkariPuzzle.LIGHT_DIRECTION:
             if self.isInBounds(row + y, col + x):
                 if self.arr[row + y, col + x] <= 4:
-                    if self.arr[row + y, col + x] == self.countNeigbourBulb(row + y, col + x):
+                    if self.arr[row + y, col + x] == self.countNeighbour(row + y, col + x, AkariPuzzle.LIGHT_BULB):
                         return False
         return True
 
@@ -107,7 +131,7 @@ class AkariPuzzle:
 
         wall_indexes = np.where(self.arr <= 4)
         for row, col in zip(wall_indexes[0], wall_indexes[1]):
-            if self.arr[row, col] != self.countNeigbourBulb(row, col):
+            if self.arr[row, col] != self.countNeighbour(row, col, AkariPuzzle.LIGHT_BULB):
                 isWallNeigbourValid = False
                 break
 
@@ -134,16 +158,58 @@ class AkariPuzzle:
                     str += 'b'
             str += '\n'
 
+
     def print_puzzle(self):
-        for i in range(self.rows):
+        print('/*********************  puzzle  ***************************/')
+        for i in range(self.rows) :
             for j in range(self.cols):
                 value = self.arr[i, j]
                 if value in range(5):
-                    print(self.arr[i][j], end=' ')
+                    if color_print:
+                        print(colored(str(value), 'red'), end=' ')
+                    else:
+                        print(str(value), end=' ')
                 elif value == AkariPuzzle.LIGHT_OFF:
-                    print('_', end=' ')
+                    if color_print:
+                        print(colored('_', 'blue'), end=' ')
+                    else:
+                        print('_', end=' ')
                 elif value == AkariPuzzle.LIGHT_ON:
-                    print('#', end=' ')
+                    if color_print:
+                        print(colored('#', 'blue'), end=' ')
+                    else:
+                        print('#', end=' ')
                 elif value == AkariPuzzle.LIGHT_BULB:
-                    print('b', end=' ')
+                    if color_print:
+                        print(colored('b', 'green'), end=' ')
+                    else:
+                        print('b', end=' ')
+            print()
+
+    def print_solution(self):
+        print('/********************  solution  ***************************/')
+        for i in range(self.rows):
+            for j in range(self.cols):
+                value = self.solution[i, j]
+                if value in range(5):
+                    if color_print:
+                        print(colored(str(value), 'red'), end=' ')
+                    else:
+                        print(str(value), end=' ')
+                elif value == AkariPuzzle.LIGHT_OFF:
+                    if color_print:
+                        print(colored('_', 'blue'), end=' ')
+                    else:
+                        print('_', end=' ')
+                elif value == AkariPuzzle.LIGHT_ON:
+                    if color_print:
+                        print(colored('#', 'blue'), end=' ')
+                    else:
+                        print('#', end=' ')
+                elif value == AkariPuzzle.LIGHT_BULB:
+                    if color_print:
+                        print(colored('b', 'green'), end=' ')
+                    else:
+                        print('b', end=' ')
+
             print()
