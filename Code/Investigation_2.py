@@ -33,26 +33,32 @@ track_methods = {
     'backtrack_H2.solvePuzzle': bt_H2.solvePuzzleH2
 }
 
+file_names = [
+    'puzzle_sample/12x12_48W.txt',
+    'puzzle_sample/12x12_24W.txt',
+    'puzzle_sample/12x12_12W.txt'
+]
 
 if __name__ == '__main__':
-    f = game.read_puzzle_file(fileName=testing_file_name)
-    puzzle = game.get_next_puzzle(f, isForward=True)
-
-    while puzzle is not None:
-        for method in track_methods:
-            print('\n/*********************')
-            print(method)
-            print('*********************/')
-            proc = mp.Process(target=track_methods[method], args=(copy.deepcopy(puzzle),))
-            start_time = time.time()
-            proc.start()
-            proc.join(timeout=60)
-            exec_time = time.time() - start_time
-            print("execution time: " + str(exec_time))
-            if proc.is_alive():
-                print('timeout')
-            proc.terminate()
+    for fileName in file_names:
+        f = game.read_puzzle_file(fileName=fileName)
         puzzle = game.get_next_puzzle(f, isForward=True)
+
+        while puzzle is not None:
+            for method in track_methods:
+                print('\n/*********************')
+                print(method)
+                print('*********************/')
+                proc = mp.Process(target=track_methods[method], args=(copy.deepcopy(puzzle),))
+                start_time = time.time()
+                proc.start()
+                proc.join(timeout=60)
+                exec_time = time.time() - start_time
+                print("execution time: " + str(exec_time))
+                if proc.is_alive():
+                    print('timeout')
+                proc.terminate()
+            puzzle = game.get_next_puzzle(f, isForward=True)
 
 
 

@@ -13,7 +13,7 @@ import Code.ForwardChecking  as fc
 DEBUG = False
 counter = 0
 checked_set = []
-testing_file_name = 'puzzle_sample/sample1.txt'
+testing_file_name = 'puzzle_sample/sample.txt'
 
 
 def solvePuzzleH1(puzzle):

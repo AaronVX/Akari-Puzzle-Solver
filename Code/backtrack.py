@@ -50,7 +50,7 @@ def solvePuzzleUtil(puzzle_rec, notAssigned_list, domain):
                 if solvePuzzleUtil(puzzle_rec, notAssigned_list, domain):
                     return True
                 else:
-                    puzzle_rec.removeLightBult(row, col)
+                    puzzle_rec.removeLightBulb(row, col)
 
         elif i == puzzle_rec.LIGHT_OFF:
             if solvePuzzleUtil(puzzle_rec, notAssigned_list, domain):

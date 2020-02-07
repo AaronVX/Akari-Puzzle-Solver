@@ -12,7 +12,7 @@ counter = 0
 testing_file_name = 'puzzle_sample/sample.txt'
 
 
-def solvePuzzle(puzzle):
+def solvePuzzleH2(puzzle):
     notAssigned = np.where(puzzle.arr == puzzle.LIGHT_OFF)
     notAssigned_list = list(zip(notAssigned[0], notAssigned[1]))
     domain = (puzzle.LIGHT_OFF, puzzle.LIGHT_BULB)
@@ -51,7 +51,7 @@ def solvePuzzleUtil(puzzle_rec, notAssigned_list, domain):
                 if solvePuzzleUtil(puzzle_rec, notAssigned_list, domain):
                     return True
                 else:
-                    puzzle_rec.removeLightBult(row, col)
+                    puzzle_rec.removeLightBulb(row, col)
 
         elif i == puzzle_rec.LIGHT_OFF:
             if solvePuzzleUtil(puzzle_rec, notAssigned_list, domain):
@@ -99,7 +99,7 @@ if __name__ == '__main__':
     puzzle = game.get_next_puzzle(f, isForward=True)
 
     while puzzle is not None:
-        solvePuzzle(puzzle)
+        solvePuzzleH2(puzzle)
         puzzle = game.get_next_puzzle(f, isForward=True)
 
 

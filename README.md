@@ -19,3 +19,11 @@ impact the most unassigned cells. The priority is calculated by checking how man
 each bulb could light up. 
 
 Backtracking_H3: Since H1 is not available, H3 (combination of H1 and H2) is the same as H2. 
+
+Forward Checking:
+
+Forward Checking H1:
+
+Forward Checking H2:
+
+Forward Checking H3:

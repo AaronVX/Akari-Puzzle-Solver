@@ -57,8 +57,6 @@ def solvePuzzleUtil_H3(puzzle_rec,probability_arr):
 
     normalized_v = edge_num_arr / np.sqrt(np.sum(edge_num_arr**2))
 
-
-
     possible_cell_set = sorted(possible_cell_set, key=lambda cell: probability_arr[cell[0], cell[1]]+normalized_v[cell[0], cell[1]]/100, reverse=True)
 
     if len(possible_cell[0]) > 0:
