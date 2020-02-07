@@ -3,12 +3,15 @@
 #   Xiaojian Xie 7821950
 # 	YanLam Ng 7775665
 # Group: 9
+import os
+import sys
+sys.path.append(os.getcwd())
 
 import Code.Game as game
 from Code.AkariPuzzle import AkariPuzzle as ap
 import numpy as np
 from termcolor import colored
-import os
+
 
 DEBUG = False
 

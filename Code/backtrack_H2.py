@@ -4,6 +4,9 @@
 # 	YanLam Ng 7775665
 # Group: 9
 
+import os
+import sys
+sys.path.append(os.getcwd())
 
 import Code.Game as game
 import numpy as np

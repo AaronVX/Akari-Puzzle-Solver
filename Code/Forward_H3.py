@@ -3,6 +3,9 @@
 #   Xiaojian Xie 7821950
 # 	YanLam Ng 7775665
 # Group: 9
+import os
+import sys
+sys.path.append(os.getcwd())
 
 import Code.Game as game
 from Code.AkariPuzzle import AkariPuzzle as ap
@@ -14,7 +17,7 @@ from sklearn.preprocessing import normalize
 DEBUG = False
 counter = 0
 checked_set = []
-testing_file_name = 'puzzle_sample/lightup puzzles.txt'
+testing_file_name = 'puzzle_sample/sample.txt'
 
 def normalize(v):
     norm=np.linalg.norm(v, ord=1)
