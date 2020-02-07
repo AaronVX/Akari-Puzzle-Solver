@@ -9,7 +9,7 @@ import Code.Game as game
 import numpy as np
 
 counter = 0
-text_file = 'puzzle_sample/sample1.txt'
+testing_file_name = 'puzzle_sample/sample.txt'
 
 
 def solvePuzzle(puzzle):
@@ -95,10 +95,12 @@ def findConstraining(puzzle, notAssigned_list):
     return winner
 
 if __name__ == '__main__':
-    file = game.read_puzzle_file(text_file)
-    puzzle = game.get_next_puzzle(file)
-    puzzle.print_puzzle()
-    solvePuzzle(puzzle)
+    f = game.read_puzzle_file(fileName=testing_file_name)
+    puzzle = game.get_next_puzzle(f, isForward=True)
+
+    while puzzle is not None:
+        solvePuzzle(puzzle)
+        puzzle = game.get_next_puzzle(f, isForward=True)
 
 
 
