@@ -15,6 +15,7 @@ testing_file_name = 'puzzle_sample/sample.txt'
 def solvePuzzle(puzzle):
     notAssigned = np.where(puzzle.arr == puzzle.LIGHT_OFF)
     notAssigned_list = list(zip(notAssigned[0], notAssigned[1]))
+
     domain = (puzzle.LIGHT_OFF, puzzle.LIGHT_BULB)
     result = solvePuzzleUtil(puzzle, notAssigned_list, domain)
     if result:
@@ -42,10 +43,7 @@ def solvePuzzleUtil(puzzle_rec, notAssigned_list, domain):
 
     for i in domain:
         counter += 1
-        if counter%1000 == 0: print(counter)
-
         if i == puzzle_rec.LIGHT_BULB:
-
             if checkValid(puzzle_rec, row, col):
                 puzzle_rec.insert_light_bulb(row, col)
                 if solvePuzzleUtil(puzzle_rec, notAssigned_list, domain):
