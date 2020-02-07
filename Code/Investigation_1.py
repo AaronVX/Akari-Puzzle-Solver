@@ -1,3 +1,9 @@
+# COMP 4190
+# Authors:
+#   Xiaojian Xie 7821950
+# 	YanLam Ng 7775665
+# Group: 9
+
 import Code.Game as game
 from Code.AkariPuzzle import AkariPuzzle as ap
 import Code.ForwardChecking as fc
